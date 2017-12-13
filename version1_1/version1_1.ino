@@ -1,3 +1,4 @@
+/*Main del proyecto Tacho Inteligente*/
 #include <EEPROM.h>
 #include "EEPROMAnything.h"
 #include "Arduino.h"
@@ -19,13 +20,13 @@ boolean flagTakeAction = false;
 Tacho r2d2=Tacho();
 boolean isOpen = false;
 int contadorIsOpen = 0;
-int alertIsOpen = 1; //minutos 
+int alertIsOpen = 1; //minutos en lo que lanzara un sms de alerta por tapa abierta 
 
 int indexEE;
 int eepromValue = 0;
 int potValue;
 int lightSensorValue;
-const int limitsPot[5]={0,255,512,767,1023}; // 1,2,3,4
+const int limitsPot[5]={0,255,512,767,1023}; // 1,2,3,4 horas
 
 
 int potEstados(int input)
