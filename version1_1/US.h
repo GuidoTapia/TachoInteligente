@@ -1,3 +1,4 @@
+/*Declaracion e implementacion de la clase Ultrasonido que maneja c/u de los sensores ultrasónicos*/
 class Ultrasonic{
   public:
     Ultrasonic(int TP, int EP);
