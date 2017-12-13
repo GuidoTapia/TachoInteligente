@@ -1,3 +1,4 @@
+/* Declaracion de la clase Tacho, cuya funcion principal es llamar a los Ultrasonidos*/
 #include "US.h"
 class Tacho{
   Ultrasonic ultrasonic[4];
@@ -34,7 +35,7 @@ public:
         valores[i]/=3;
       }
       
-      //Serial.print(i+1); //only for debugging
+      
       Serial.print(" - "); //only for debugging
       Serial.print(valores[i]); //only for debugging
       String val(valores[i]);
