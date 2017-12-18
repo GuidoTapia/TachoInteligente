@@ -1,3 +1,4 @@
+/* Es la libreria para leer de memoria ROM del arduino*/
 #ifndef EEPROMAnything.h
   #define EEPROMAnything.h
 
