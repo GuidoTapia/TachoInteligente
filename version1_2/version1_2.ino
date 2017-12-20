@@ -9,6 +9,8 @@ SoftwareSerial GSMSerial(11,10);
 const int lightSensorPin = A0;
 const int buttonStartPin = A2;
 const int potPin = A1;
+const int ledPin = A3;//cambiar con a2
+int fadeAmount = 5;
 
 int buttonStartState = 0;      
 
@@ -20,13 +22,13 @@ Tacho r2d2=Tacho();
 boolean isOpen = false;
 int contadorIsOpen = 0;
 int alertIsOpen = 1; //minutos 
-
+int contFade;
+int brightness;
 int indexEE;
 int eepromValue = 0;
 int potValue;
 int lightSensorValue;
 const int limitsPot[5]={0,255,512,767,1023}; // 1,2,3,4
-
 
 int potEstados(int input)
 {
@@ -50,7 +52,8 @@ void mandar_SMS(String mensaje, int typeOfMessage){
   Serial.println("Enviando SMS...");
   GSMSerial.print("AT+CMGF=1\r"); //Comando AT para mandar un SMS
   delay(1000);
-  GSMSerial.println("AT+CMGS=\"+51992547553\"\r"); //Numero al que vamos a enviar el mensaje
+  GSMSerial.println("AT+CMGS=\"+51943415889\"\r"); //Numero al que vamos a enviar el mensaje
+  //guido:992547553
   delay(1000);
   mensaje.concat(" (");
   mensaje.concat(typeOfMessage);
@@ -64,6 +67,30 @@ void mandar_SMS(String mensaje, int typeOfMessage){
   Serial.println("SMS enviado");
 }
 
+void ledFade(boolean isInicializated){
+  if(!isInicializated){
+    brightness = 0;
+    contFade = 0;
+    while(contFade<17){
+      analogWrite(ledPin, brightness);    
+      brightness = brightness + fadeAmount;
+      if (brightness == 0 || brightness == 255) {
+        fadeAmount = -fadeAmount ; 
+      }     
+      // wait for 30 milliseconds to see the dimming effect    
+      delay(30);
+      Serial.print(".");      
+      contFade++;
+    }
+  }
+  else
+  {
+    digitalWrite(ledPin,HIGH);
+  }
+  Serial.println("fade out");
+  return;
+}
+
 
 void setup()
 {   
@@ -73,9 +100,11 @@ void setup()
  pinMode(buttonStartPin,INPUT);     
  pinMode(potPin,INPUT); 
  pinMode(lightSensorPin,INPUT);     
+ pinMode(ledPin, OUTPUT);
  Serial.println("Start r2d2 program");
  delay(5000);
 }
+
 void loop(){
 
   indexEE = 0;      //Lee los valores de la EEPROM 
@@ -105,16 +134,19 @@ void loop(){
   else
     {
       //mandar señal de prender
-      Serial.println(" > enter r2d2code"); 
+      Serial.println(" >> enter r2d2code"); 
       delay(3000);      
       Serial.print("out");
       while(!flagTakeAction)
       {
-        Serial.println("in");
+        Serial.print ("in ");
+        Serial.println(buttonStartState);
+        ledFade(flagfirstMedicion);
+        buttonStartState = digitalRead(buttonStartPin); 
         if (buttonStartState == HIGH && flagfirstMedicion == false)
         {//buttonStartState is pressed (primera vez)
          String FisrtMedicion = r2d2.medir();
-         mandar_SMS(FisrtMedicion,2);
+         ///mandar_SMS(FisrtMedicion,2);
          Serial.println("FisrtMedicion: (2) ");//debugging
          Serial.println(FisrtMedicion); //debugging
          flagfirstMedicion = true;
@@ -132,7 +164,7 @@ void loop(){
            if(flagSmsSend == false)
             {
              String resMedicion = r2d2.medir();
-            //mandar_SMS(resMedicion,0);
+            ///mandar_SMS(resMedicion,0);
              Serial.println("resMedicion: (0) ");//debugging
              Serial.println(resMedicion);//debugging
              flagSmsSend = true;
@@ -149,7 +181,7 @@ void loop(){
               String SAlertIsOpen="El tacho ha estdo abierto por mas de";
               SAlertIsOpen.concat(alertIsOpen);
               SAlertIsOpen.concat(" min");
-              mandar_SMS(SAlertIsOpen,1);
+              ///mandar_SMS(SAlertIsOpen,1);
               Serial.println(SAlertIsOpen);
               contadorIsOpen = 0;
               flagTakeAction = true;
@@ -166,6 +198,6 @@ void loop(){
       indexEE += EEPROM_writeAnything(indexEE, eepromValue);      
       indexEE += EEPROM_writeAnything(indexEE, flagfirstMedicion);      
     } 
-    delay(3000); //quitar?
+    delay(3000); //quitar cuando este el circuito de apagado
 }
   
