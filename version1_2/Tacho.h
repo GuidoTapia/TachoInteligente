@@ -5,11 +5,11 @@ class Tacho{
 public:
   Tacho()
   {
-    ultrasonic[0]=Ultrasonic(2,3);
-    ultrasonic[1]=Ultrasonic(4,5);
-    ultrasonic[2]=Ultrasonic(6,7);
-    ultrasonic[3]=Ultrasonic(8,9);
-    ultrasonic[4]=Ultrasonic(12,13);
+    ultrasonic[0]=Ultrasonic(3,2);
+    ultrasonic[1]=Ultrasonic(5,4);
+    ultrasonic[2]=Ultrasonic(7,6);
+    ultrasonic[3]=Ultrasonic(9,8);
+    ultrasonic[4]=Ultrasonic(13,12);
   }
   String medir() ///
   {
@@ -43,7 +43,8 @@ public:
       resMedicion.concat(i);
       resMedicion.concat("\":\"");
       resMedicion.concat(val);
-      if(i<3)resMedicion.concat("\",");
+      if(i<4)resMedicion.concat("\",");
+      if(i==4)resMedicion.concat("\"");
     }
     //{ "US0":"12", "US1":"12", "US2":"15","US3":"14" } 
     Serial.println();

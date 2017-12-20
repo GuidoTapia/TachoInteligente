@@ -1,6 +1,6 @@
 class Ultrasonic{
   public:
-    Ultrasonic(int TP, int EP);
+    Ultrasonic(int EP, int TP);
     Ultrasonic();
     long Timing();
     long Ranging();
@@ -21,9 +21,9 @@ Ultrasonic::Ultrasonic(){
    Time_out=6000;
 }
 
-Ultrasonic::Ultrasonic(int TP, int EP){
-   pinMode(TP,OUTPUT);
-   pinMode(EP,INPUT);
+Ultrasonic::Ultrasonic(int EP, int TP){
+   pinMode(EP,OUTPUT);
+   pinMode(TP,INPUT);
    Trig_pin=TP;
    Echo_pin=EP;
    Time_out=6000;  // 3000 µs = 50cm // 30000 µs = 5 m 
