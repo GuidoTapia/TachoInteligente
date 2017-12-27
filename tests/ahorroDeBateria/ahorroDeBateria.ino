@@ -14,7 +14,7 @@ int potEstados(int input)
   int res =0;
   for(int i = 1 ;i<5;i++)
   {
-      if(input > limitsPot[i-1] && input <= limitsPot[i])
+      if(input >= limitsPot[i-1] && input <= limitsPot[i])
       {
         res = i*4;
       }

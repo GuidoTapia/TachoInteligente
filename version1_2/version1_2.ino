@@ -7,9 +7,9 @@ SoftwareSerial GSMSerial(11,10);
 
 
 const int lightSensorPin = A0;
-const int buttonStartPin = A2;
+const int buttonStartPin = A3;
 const int potPin = A1;
-const int ledPin = A3;//cambiar con a2
+const int ledPin = A2;//cambiar con a2
 int fadeAmount = 5;
 
 int buttonStartState = 0;      
@@ -35,7 +35,7 @@ int potEstados(int input)
   int res =0;
   for(int i = 1 ;i<5;i++)
   {
-      if(input > limitsPot[i-1] && input <= limitsPot[i])
+      if(input >= limitsPot[i-1] && input <= limitsPot[i])
       {
         res = i*4;
       }
@@ -112,11 +112,12 @@ void loop(){
   indexEE += EEPROM_readAnything(indexEE, flagfirstMedicion); 
   Serial.println("flagfirstMedicion: ");
   Serial.println(flagfirstMedicion); 
-  //potValue = analogRead(potPin);
-  potValue = 156;
+  potValue = analogRead(potPin);
+  //potValue = 156;
   Serial.print("potValue: ");
   Serial.println(potValue);  
-  potValue = potEstados(potValue);
+  //potValue = potEstados(potValue);
+  potValue = 0;
   Serial.print("potEstados: ");
   Serial.println(potValue);  
   if (eepromValue < potValue)
@@ -146,7 +147,7 @@ void loop(){
         if (buttonStartState == HIGH && flagfirstMedicion == false)
         {//buttonStartState is pressed (primera vez)
          String FisrtMedicion = r2d2.medir();
-         ///mandar_SMS(FisrtMedicion,2);
+         mandar_SMS(FisrtMedicion,2);
          Serial.println("FisrtMedicion: (2) ");//debugging
          Serial.println(FisrtMedicion); //debugging
          flagfirstMedicion = true;
@@ -164,7 +165,7 @@ void loop(){
            if(flagSmsSend == false)
             {
              String resMedicion = r2d2.medir();
-            ///mandar_SMS(resMedicion,0);
+             mandar_SMS(resMedicion,0);
              Serial.println("resMedicion: (0) ");//debugging
              Serial.println(resMedicion);//debugging
              flagSmsSend = true;
@@ -181,7 +182,7 @@ void loop(){
               String SAlertIsOpen="El tacho ha estdo abierto por mas de";
               SAlertIsOpen.concat(alertIsOpen);
               SAlertIsOpen.concat(" min");
-              ///mandar_SMS(SAlertIsOpen,1);
+              mandar_SMS(SAlertIsOpen,1);
               Serial.println(SAlertIsOpen);
               contadorIsOpen = 0;
               flagTakeAction = true;
