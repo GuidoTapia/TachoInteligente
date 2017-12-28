@@ -34,10 +34,10 @@ public:
       }else{
         valores[i]/=3;
       }
-      
       //Serial.print(i+1); //only for debugging
       Serial.print(" - "); //only for debugging
       Serial.print(valores[i]); //only for debugging
+    
       String val(valores[i]);
       resMedicion.concat("\"US");
       resMedicion.concat(i);

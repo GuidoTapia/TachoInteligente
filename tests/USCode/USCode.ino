@@ -112,7 +112,7 @@ public:
     ultrasonic[1]=Ultrasonic(5,4);
     ultrasonic[2]=Ultrasonic(7,6);
     ultrasonic[3]=Ultrasonic(9,8);
-    ultrasonic[4]=Ultrasonic(13,12);
+    ultrasonic[4]=Ultrasonic(12,13);
   }
   void medir()
   {
@@ -168,6 +168,7 @@ void setup() {
 void loop(){
   //Serial.println(ultrasonic.Promedio());
   Serial.println("Resultado de la medicion:");
-  Serial.println(r2d2.medicion());
+  r2d2.medir();
+  //Serial.println(r2d2.medicion());
   delay(100);
 }

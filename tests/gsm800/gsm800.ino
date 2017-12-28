@@ -16,6 +16,8 @@ void setup() {
  Serial.println("Inisialize SIM800L module");
  delay(1000);
  }
+//ATD+51943588606;
+
 
 void loop() {
   if(serialSIM800.available()){
