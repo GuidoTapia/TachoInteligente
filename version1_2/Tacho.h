@@ -9,7 +9,7 @@ public:
     ultrasonic[1]=Ultrasonic(5,4);
     ultrasonic[2]=Ultrasonic(7,6);
     ultrasonic[3]=Ultrasonic(9,8);
-    ultrasonic[4]=Ultrasonic(13,12);
+    ultrasonic[4]=Ultrasonic(12,13);
   }
   String medir() ///
   {

@@ -9,7 +9,7 @@ SoftwareSerial GSMSerial(11,10);
 const int lightSensorPin = A0;
 const int buttonStartPin = A3;
 const int potPin = A1;
-const int ledPin = A2;//cambiar con a2
+const int ledPin = A2;
 int fadeAmount = 5;
 
 int buttonStartState = 0;      
