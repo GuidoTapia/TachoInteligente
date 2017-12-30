@@ -29,7 +29,8 @@ void mandar_SMS(String mensaje, int typeOfMessage){
 
 void llamada(){
 delay(5000);
-  GSMSerial.print("ATD+51943415889;\r");
+  GSMSerial.print("ATD+51992547553;\r");
+ //GSMSerial.print("ATD+51943415889;\r");
 Serial.println("llamando");
 delay(20000);
 Serial.println("finalizar llamada");
