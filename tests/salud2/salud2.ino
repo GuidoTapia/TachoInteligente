@@ -27,6 +27,14 @@ void mandar_SMS(String mensaje, int typeOfMessage){
 }
 
 
+void llamada(){
+delay(5000);
+  GSMSerial.print("ATD+51943415889;\r");
+Serial.println("llamando");
+delay(20000);
+Serial.println("finalizar llamada");
+GSMSerial.print("ATH\r");
+}
 
 void setup(){
 Serial.begin(9600);
@@ -38,8 +46,9 @@ Serial.begin(9600);
 void loop(){
 if(contador == 0){
   //{ \"US0\":\"12", "US1":"12", "US2":"15","US3":"14" }
-  String stringOne = "SMS(HELLO WORLD)-->"; 
-  mandar_SMS(stringOne,2);
+  String stringOne = "SMS(HELLO WORLD ALMOST)-->"; 
+  //mandar_SMS(stringOne,2);
+  llamada();
   contador = 1;
    }
 }
