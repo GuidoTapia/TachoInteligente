@@ -10,7 +10,6 @@ const int lightSensorPin = A0;
 const int buttonStartPin = A3;
 const int potPin = A1;
 const int ledPin = A2;
-int fadeAmount = 5;
 
 int buttonStartState = 0;      
 
@@ -22,8 +21,6 @@ Tacho r2d2=Tacho();
 boolean isOpen = false;
 int contadorIsOpen = 0;
 int alertIsOpen = 1; //minutos 
-int contFade;
-int brightness;
 int indexEE;
 int eepromValue = 0;
 int potValue;
@@ -52,7 +49,7 @@ void mandar_SMS(String mensaje, int typeOfMessage){
   Serial.println("Enviando SMS...");
   GSMSerial.print("AT+CMGF=1\r"); //Comando AT para mandar un SMS
   delay(1000);
-  GSMSerial.println("AT+CMGS=\"+51943588606\"\r"); //Numero al que vamos a enviar el mensaje
+  GSMSerial.println("AT+CMGS=\"+51992547553\"\r"); //Numero al que vamos a enviar el mensaje
   //guido:992547553
   delay(1000);
   mensaje.concat(" (");
@@ -67,29 +64,37 @@ void mandar_SMS(String mensaje, int typeOfMessage){
   Serial.println("SMS enviado");
 }
 
+void blinkLedPin(int times, int duration){
+  for(int i = 0;i < times; i++){
+     digitalWrite(ledPin, HIGH);
+     delay(duration); 
+     digitalWrite(ledPin, LOW);
+     delay(duration); 
+     
+  }
+}
+
 void ledFade(boolean isInicializated){
   if(!isInicializated){
-    brightness = 0;
-    contFade = 0;
-    while(contFade<17){
-      analogWrite(ledPin, brightness);    
-      brightness = brightness + fadeAmount;
-      if (brightness == 0 || brightness == 255) {
-        fadeAmount = -fadeAmount ; 
-      }     
-      // wait for 30 milliseconds to see the dimming effect    
-      delay(30);
-      Serial.print(".");      
-      contFade++;
-    }
+    blinkLedPin(3, 500);
   }
   else
   {
     digitalWrite(ledPin,HIGH);
   }
-  Serial.println("fade out");
   return;
 }
+
+void llamada(){
+delay(5000);
+  //GSMSerial.print("ATD+51943415889;\r");
+  GSMSerial.print("ATD+51992547553;\r");
+Serial.println("llamando");
+delay(20000);
+Serial.println("finalizar llamada");
+GSMSerial.print("ATH\r");
+}
+
 
 
 void setup()
@@ -105,18 +110,16 @@ void setup()
  delay(5000);
 }
 
-void loop(){
-
+void loop(){  
   indexEE = 0;      //Lee los valores de la EEPROM 
   indexEE += EEPROM_readAnything(indexEE, eepromValue);  
   indexEE += EEPROM_readAnything(indexEE, flagfirstMedicion); 
   Serial.println("flagfirstMedicion: ");
   Serial.println(flagfirstMedicion); 
   potValue = analogRead(potPin);
-  //potValue = 156;
   Serial.print("potValue: ");
   Serial.println(potValue);  
-  //potValue = potEstados(potValue);
+  potValue = potEstados(potValue);
   potValue = 0;
   Serial.print("potEstados: ");
   Serial.println(potValue);  
@@ -126,15 +129,14 @@ void loop(){
       eepromValue++;
       Serial.print("valor a escribir en EE ");
       Serial.println(eepromValue);
+      blinkLedPin(eepromValue,500);
       indexEE +=EEPROM_writeAnything(indexEE, eepromValue);  //Guarda los valores en la EEPROM
       // solo para dejarlo seteado antes de poner en uso
       //flagfirstMedicion=0;
       indexEE +=EEPROM_writeAnything(indexEE, flagfirstMedicion);
-      //mandar señal de apagar
     }
   else
     {
-      //mandar señal de prender
       Serial.println(" >> enter r2d2code"); 
       delay(3000);      
       Serial.print("out");
@@ -157,6 +159,7 @@ void loop(){
         { //funcionamiento normal
         if(flagfirstMedicion){
           lightSensorValue = analogRead(lightSensorPin);
+          lightSensorValue= 50;
          Serial.print("lightSensorValue ");
          Serial.println(lightSensorValue);
          //lightSensorValue = 150;
@@ -165,10 +168,12 @@ void loop(){
            if(flagSmsSend == false)
             {
              String resMedicion = r2d2.medir();
-             mandar_SMS(resMedicion,0);
+             //mandar_SMS(resMedicion,0);
+             llamada();
              Serial.println("resMedicion: (0) ");//debugging
              Serial.println(resMedicion);//debugging
              flagSmsSend = true;
+             blinkLedPin(3,200);
              flagTakeAction = true;
             }  
            contadorIsOpen = 0;
@@ -190,7 +195,7 @@ void loop(){
             delay(1000); // 1seg -- tiempo de espera para volver a revisar si ya cerraron el tacho
             contadorIsOpen++;           
           }
-        } 
+         } 
         }
       }
       eepromValue=0;
@@ -199,6 +204,6 @@ void loop(){
       indexEE += EEPROM_writeAnything(indexEE, eepromValue);      
       indexEE += EEPROM_writeAnything(indexEE, flagfirstMedicion);      
     } 
-    delay(3000); //quitar cuando este el circuito de apagado
+    blinkLedPin(7,250);
 }
   

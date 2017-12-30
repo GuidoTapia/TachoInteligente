@@ -1,6 +1,6 @@
 class Ultrasonic{
   public:
-    Ultrasonic(int EP, int TP);
+    Ultrasonic(int TP, int EP);
     Ultrasonic();
     long Timing();
     long Ranging();
