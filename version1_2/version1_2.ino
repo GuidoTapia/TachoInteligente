@@ -120,7 +120,7 @@ void loop(){
   Serial.print("potValue: ");
   Serial.println(potValue);  
   potValue = potEstados(potValue);
-  potValue = 0;
+  //potValue = 0;
   Serial.print("potEstados: ");
   Serial.println(potValue);  
   if (eepromValue < potValue)
@@ -134,6 +134,9 @@ void loop(){
       // solo para dejarlo seteado antes de poner en uso
       //flagfirstMedicion=0;
       indexEE +=EEPROM_writeAnything(indexEE, flagfirstMedicion);
+      while(true){
+        delay(90000);
+      }
     }
   else
     {
@@ -159,7 +162,7 @@ void loop(){
         { //funcionamiento normal
         if(flagfirstMedicion){
           lightSensorValue = analogRead(lightSensorPin);
-          lightSensorValue= 50;
+          //lightSensorValue= 50;
          Serial.print("lightSensorValue ");
          Serial.println(lightSensorValue);
          //lightSensorValue = 150;
@@ -168,8 +171,8 @@ void loop(){
            if(flagSmsSend == false)
             {
              String resMedicion = r2d2.medir();
-             //mandar_SMS(resMedicion,0);
-             llamada();
+             mandar_SMS(resMedicion,0);
+             //llamada();
              Serial.println("resMedicion: (0) ");//debugging
              Serial.println(resMedicion);//debugging
              flagSmsSend = true;
@@ -202,8 +205,10 @@ void loop(){
       indexEE = 0;
       Serial.println("Reiniciar a 0");
       indexEE += EEPROM_writeAnything(indexEE, eepromValue);      
-      indexEE += EEPROM_writeAnything(indexEE, flagfirstMedicion);      
+      indexEE += EEPROM_writeAnything(indexEE, flagfirstMedicion);
+      while(true){
+        delay(90000);
+      }      
     } 
-    blinkLedPin(7,250);
+    //blinkLedPin(7,250);
 }
-  
